@@ -1,12 +1,15 @@
-import { CssBaseline } from '@material-ui/core';
 import {
   makeStyles,
   createTheme,
   ThemeProvider
 } from '@material-ui/core/styles';
-import Header from '../components/Header';
-import SideMenu from '../components/SideMenu';
+import { CssBaseline } from '@material-ui/core';
+import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+
 import './App.css';
+import Header from '../components/Header';
+import PageHeader from '../components/PageHeader';
+import SideMenu from '../components/SideMenu';
 
 const theme = createTheme({
   palette: {
@@ -21,6 +24,21 @@ const theme = createTheme({
     background: {
       default: '#f4f5fd'
     }
+  },
+  // shape: {
+  //   borderRadius: '12px'
+  // }
+  overrides: {
+    MuiAppBar: {
+      root: {
+        transform: 'translateZ(0)'
+      }
+    }
+  },
+  props: {
+    MuiIconButton: {
+      disableRipple: true
+    }
   }
 });
 
@@ -33,11 +51,17 @@ const useStyles = makeStyles({
 
 const App = () => {
   const classes = useStyles();
+
   return (
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
         <Header />
+        <PageHeader
+          title="Page Header"
+          subTitle="Page description"
+          icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
+        />
       </div>
       <CssBaseline />
     </ThemeProvider>
