@@ -11,6 +11,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm, Form } from '../../components/useForm';
 
+import Input from '../../components/controls/Input';
+
 const initialFieldValues = {
   id: 0,
   fullName: '',
@@ -30,18 +32,17 @@ const EmployeeForm = () => {
     <Form>
       <Grid container>
         <Grid item xs={6}>
-          <TextField
-            variant="outlined"
-            label="Full Name"
+          <Input
             name="fullName"
+            label="Full Name"
             value={values.fullName}
             onChange={handleInputChange}
           />
-          <TextField
-            variant="outlined"
+          <Input
             label="Email"
             name="email"
             value={values.email}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={6}>
