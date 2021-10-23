@@ -13,7 +13,12 @@ export const useForm = initialFieldValues => {
     });
   };
 
-  return { values, setValues, errors, setErrors, handleInputChange };
+  const resetForm = () => {
+    setValues(initialFieldValues);
+    setErrors({});
+  };
+
+  return { values, setValues, errors, setErrors, handleInputChange, resetForm };
 };
 
 const useStyles = makeStyles(theme => ({

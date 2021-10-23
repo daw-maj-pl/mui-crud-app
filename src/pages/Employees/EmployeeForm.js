@@ -24,7 +24,7 @@ const initialFieldValues = {
 };
 
 const EmployeeForm = () => {
-  const { values, setValues, errors, setErrors, handleInputChange } =
+  const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFieldValues);
 
   const validate = () => {
@@ -107,7 +107,7 @@ const EmployeeForm = () => {
           />
           <div>
             <Controls.Button type="submit" text="Submit" />
-            <Controls.Button text="Reset" color="default" />
+            <Controls.Button text="Reset" color="default" onClick={resetForm} />
           </div>
         </Grid>
       </Grid>
