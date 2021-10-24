@@ -1,7 +1,34 @@
-import { Table, TableCell, TableHead, TableRow } from '@material-ui/core';
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  makeStyles
+} from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  table: {
+    marginTop: theme.spacing(3),
+    '& thead th': {
+      fontWeight: '600',
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.light
+    },
+    '& tbody td': {
+      fontWeight: '300'
+    },
+    '& tbody tr:hover': {
+      backgroundColor: '#fffbf2',
+      cursor: 'pointer'
+    }
+  }
+}));
 
 const useTable = (records, headCells) => {
-  const TblContainer = props => <Table>{props.children}</Table>;
+  const classes = useStyles();
+  const TblContainer = props => (
+    <Table className={classes.table}>{props.children}</Table>
+  );
 
   const TblHead = props => (
     <TableHead>
