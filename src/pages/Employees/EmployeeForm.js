@@ -24,21 +24,30 @@ const initialFieldValues = {
 };
 
 const EmployeeForm = () => {
-  const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
-    useForm(initialFieldValues);
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ('fullName' in fieldValues)
+      temp.fullName = fieldValues.fullName ? '' : 'This field is required.';
+    if ('email' in fieldValues)
+      temp.email = /$^|.+@.+..+/.test(fieldValues.email)
+        ? ''
+        : 'Email is not valid.';
+    if ('mobile' in fieldValues)
+      temp.mobile =
+        fieldValues.mobile.length >= 9 ? '' : 'Minimum 9 numbers required.';
+    if ('departmentId' in fieldValues)
+      temp.departmentId =
+        fieldValues.departmentId.length !== 0 ? '' : 'This field is required.';
+    setErrors({
+      ...temp
+    });
 
-  const validate = () => {
-    let temp = {};
-    temp.fullName = values.fullName ? '' : 'This field is required.';
-    temp.email = /$^|.+@.+..+/.test(values.email) ? '' : 'Email is not valid.';
-    temp.mobile =
-      values.mobile.length >= 9 ? '' : 'Mininmum 9 numbers required.';
-    temp.departmentId =
-      values.departmentId.length != 0 ? '' : 'This field is required.';
-    setErrors({ ...temp });
-
-    return Object.values(temp).every(value => value === '');
+    if (fieldValues === values)
+      return Object.values(temp).every(value => value === '');
   };
+
+  const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
+    useForm(initialFieldValues, true, validate);
 
   const handleSubmit = e => {
     e.preventDefault();
