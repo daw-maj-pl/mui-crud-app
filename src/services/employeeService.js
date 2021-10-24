@@ -21,7 +21,12 @@ export const generateEmployeeId = () => {
 export const getAllEmployees = () => {
   if (localStorage.getItem(KEYS.employees) === null)
     localStorage.setItem(KEYS.employees, JSON.stringify([]));
-  return JSON.parse(localStorage.getItem(KEYS.employees));
+  let employees = JSON.parse(localStorage.getItem(KEYS.employees));
+  let departments = getDepartmentCollection();
+  return employees.map(employee => ({
+    ...employee,
+    department: departments[employee.departmentId - 1].title
+  }));
 };
 
 export const insertEmployee = data => {
