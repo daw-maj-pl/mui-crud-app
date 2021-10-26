@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Paper, TableBody, TableCell, TableRow } from '@material-ui/core';
+import {
+  InputAdornment,
+  Paper,
+  TableBody,
+  TableCell,
+  TableRow,
+  Toolbar
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 
@@ -7,6 +14,8 @@ import PageHeader from '../../components/PageHeader';
 import EmployeeForm from './EmployeeForm';
 import useTable from '../../components/useTable';
 import * as EmployeeService from '../../services/employeeService';
+import Controls from '../../components/controls/Controls';
+import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   pageContent: {
@@ -38,6 +47,18 @@ const Employees = () => {
       />
       <Paper className={classes.pageContent}>
         {/* <EmployeeForm /> */}
+        <Toolbar>
+          <Controls.Input
+            label="Search Employees"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              )
+            }}
+          />
+        </Toolbar>
         <TblContainer>
           <TblHead />
           <TableBody>
