@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
   pageContent: {
     margin: theme.spacing(5),
     padding: theme.spacing(3)
+  },
+  searchInput: {
+    width: '75%'
   }
 }));
 
@@ -34,9 +37,23 @@ const headCells = [
 const Employees = () => {
   const classes = useStyles();
   const [records, setRecords] = useState(EmployeeService.getAllEmployees());
+  const [filterFn, setFilterFn] = useState({ fn: items => items });
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-    useTable(records, headCells);
+    useTable(records, headCells, filterFn);
+
+  const handleSearch = e => {
+    let target = e.target;
+    setFilterFn({
+      fn: items => {
+        if (target.value === '') return items;
+        else
+          return items.filter(item =>
+            item.fullName.toLowerCase().includes(target.value)
+          );
+      }
+    });
+  };
 
   return (
     <>
@@ -50,6 +67,7 @@ const Employees = () => {
         <Toolbar>
           <Controls.Input
             label="Search Employees"
+            className={classes.searchInput}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -57,6 +75,7 @@ const Employees = () => {
                 </InputAdornment>
               )
             }}
+            onChange={handleSearch}
           />
         </Toolbar>
         <TblContainer>
