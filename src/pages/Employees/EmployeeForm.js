@@ -23,7 +23,7 @@ const initialFieldValues = {
   isPermanent: false
 };
 
-const EmployeeForm = ({ addOrEdit }) => {
+const EmployeeForm = ({ addOrEdit, recordForEdit }) => {
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ('fullName' in fieldValues)
@@ -55,6 +55,13 @@ const EmployeeForm = ({ addOrEdit }) => {
       addOrEdit(values, resetForm);
     }
   };
+
+  useEffect(() => {
+    if (recordForEdit)
+      setValues({
+        ...recordForEdit
+      });
+  }, [recordForEdit, setValues]);
 
   return (
     <Form onSubmit={handleSubmit}>
