@@ -35,3 +35,10 @@ export const insertEmployee = data => {
   data['id'] = generateEmployeeId();
   localStorage.setItem(KEYS.employees, JSON.stringify(employees));
 };
+
+export const updateEmployee = data => {
+  let employees = getAllEmployees();
+  let recordIndex = employees.findIndex(x => x.id === data.id);
+  employees[recordIndex] = { ...data };
+  localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+};
