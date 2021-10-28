@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import Search from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import CloseIcon from '@material-ui/icons/Close';
 
 import PageHeader from '../../components/PageHeader';
 import EmployeeForm from './EmployeeForm';
@@ -37,7 +39,8 @@ const headCells = [
   { id: 'fullName', label: 'Employee Name' },
   { id: 'email', label: 'Email Address (Personal)' },
   { id: 'mobile', label: 'Mobile Number' },
-  { id: 'department', label: 'Department', disableSorting: true }
+  { id: 'department', label: 'Department' },
+  { id: 'actions', label: 'Actions', disableSorting: true }
 ];
 
 const Employees = () => {
@@ -45,6 +48,7 @@ const Employees = () => {
   const [records, setRecords] = useState(employeeService.getAllEmployees());
   const [filterFn, setFilterFn] = useState({ fn: items => items });
   const [openPopup, setOpenPopup] = useState(false);
+  const [recordForEdit, setRecordForEdit] = useState(null);
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(records, headCells, filterFn);
@@ -63,10 +67,17 @@ const Employees = () => {
   };
 
   const addOrEdit = (employee, resetForm) => {
-    employeeService.insertEmployee(employee);
+    if (employee.id === 0) employeeService.insertEmployee(employee);
+    else employeeService.updateEmployee(employee);
     resetForm();
+    setRecordForEdit(null);
     setOpenPopup(false);
     setRecords(employeeService.getAllEmployees());
+  };
+
+  const openInPopup = item => {
+    setRecordForEdit(item);
+    setOpenPopup(true);
   };
 
   return (
@@ -97,7 +108,7 @@ const Employees = () => {
             className={classes.newButton}
             onClick={() => {
               setOpenPopup(true);
-              // setRecordForEdit(null);
+              setRecordForEdit(null);
             }}
           />
         </Toolbar>
@@ -110,6 +121,17 @@ const Employees = () => {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.mobile}</TableCell>
                 <TableCell>{item.department}</TableCell>
+                <TableCell>
+                  <Controls.ActionButton
+                    onClick={() => openInPopup(item)}
+                    color="primary"
+                  >
+                    <EditOutlinedIcon fontSize="small" />
+                  </Controls.ActionButton>
+                  <Controls.ActionButton color="secondary">
+                    <CloseIcon fontSize="small" />
+                  </Controls.ActionButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -121,7 +143,7 @@ const Employees = () => {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <EmployeeForm addOrEdit={addOrEdit} />
+        <EmployeeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
     </>
   );
