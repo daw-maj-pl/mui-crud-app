@@ -9,13 +9,15 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+import Search from '@material-ui/icons/Search';
+import AddIcon from '@material-ui/icons/Add';
 
 import PageHeader from '../../components/PageHeader';
 import EmployeeForm from './EmployeeForm';
 import useTable from '../../components/useTable';
-import * as EmployeeService from '../../services/employeeService';
+import * as employeeService from '../../services/employeeService';
 import Controls from '../../components/controls/Controls';
-import { Search } from '@material-ui/icons';
+import Popup from '../../components/Popup';
 
 const useStyles = makeStyles(theme => ({
   pageContent: {
@@ -24,6 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
   searchInput: {
     width: '75%'
+  },
+  newButton: {
+    position: 'absolute',
+    right: '10px'
   }
 }));
 
@@ -36,8 +42,9 @@ const headCells = [
 
 const Employees = () => {
   const classes = useStyles();
-  const [records, setRecords] = useState(EmployeeService.getAllEmployees());
+  const [records, setRecords] = useState(employeeService.getAllEmployees());
   const [filterFn, setFilterFn] = useState({ fn: items => items });
+  const [openPopup, setOpenPopup] = useState(false);
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
     useTable(records, headCells, filterFn);
@@ -55,6 +62,13 @@ const Employees = () => {
     });
   };
 
+  const addOrEdit = (employee, resetForm) => {
+    employeeService.insertEmployee(employee);
+    resetForm();
+    setOpenPopup(false);
+    setRecords(employeeService.getAllEmployees());
+  };
+
   return (
     <>
       <PageHeader
@@ -63,7 +77,6 @@ const Employees = () => {
         icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
       />
       <Paper className={classes.pageContent}>
-        {/* <EmployeeForm /> */}
         <Toolbar>
           <Controls.Input
             label="Search Employees"
@@ -76,6 +89,16 @@ const Employees = () => {
               )
             }}
             onChange={handleSearch}
+          />
+          <Controls.Button
+            text="Add New"
+            variant="outlined"
+            startIcon={<AddIcon />}
+            className={classes.newButton}
+            onClick={() => {
+              setOpenPopup(true);
+              // setRecordForEdit(null);
+            }}
           />
         </Toolbar>
         <TblContainer>
@@ -93,6 +116,13 @@ const Employees = () => {
         </TblContainer>
         <TblPagination />
       </Paper>
+      <Popup
+        title="Employee Form"
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
+        <EmployeeForm addOrEdit={addOrEdit} />
+      </Popup>
     </>
   );
 };
