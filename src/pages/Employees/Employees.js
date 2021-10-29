@@ -98,15 +98,17 @@ const Employees = () => {
   };
 
   const onDelete = id => {
-    if (window.confirm('Are you sure to delete this record?')) {
-      employeeService.deleteEmployee(id);
-      setRecords(employeeService.getAllEmployees());
-      setNotify({
-        isOpen: true,
-        message: 'Deleted successfully',
-        type: 'error'
-      });
-    }
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false
+    });
+    employeeService.deleteEmployee(id);
+    setRecords(employeeService.getAllEmployees());
+    setNotify({
+      isOpen: true,
+      message: 'Deleted successfully',
+      type: 'error'
+    });
   };
 
   return (
@@ -163,9 +165,9 @@ const Employees = () => {
                       setConfirmDialog({
                         isOpen: true,
                         title: 'Are you sure to delete this record?',
-                        subTitle: 'You can not undo this operation'
+                        subTitle: 'You can not undo this operation',
+                        onConfirm: () => onDelete(item.id)
                       });
-                      // onDelete(item.id)
                     }}
                   >
                     <CloseIcon fontSize="small" />
