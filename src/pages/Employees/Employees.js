@@ -91,6 +91,18 @@ const Employees = () => {
     setOpenPopup(true);
   };
 
+  const onDelete = id => {
+    if (window.confirm('Are you sure to delete this record?')) {
+      employeeService.deleteEmployee(id);
+      setRecords(employeeService.getAllEmployees());
+      setNotify({
+        isOpen: true,
+        message: 'Deleted successfully',
+        type: 'error'
+      });
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -139,7 +151,10 @@ const Employees = () => {
                   >
                     <EditOutlinedIcon fontSize="small" />
                   </Controls.ActionButton>
-                  <Controls.ActionButton color="secondary">
+                  <Controls.ActionButton
+                    color="secondary"
+                    onClick={() => onDelete(item.id)}
+                  >
                     <CloseIcon fontSize="small" />
                   </Controls.ActionButton>
                 </TableCell>
