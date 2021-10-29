@@ -21,6 +21,7 @@ import * as employeeService from '../../services/employeeService';
 import Controls from '../../components/controls/Controls';
 import Popup from '../../components/Popup';
 import Notification from '../../components/Notification';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 const useStyles = makeStyles(theme => ({
   pageContent: {
@@ -54,6 +55,11 @@ const Employees = () => {
     isOpen: false,
     message: '',
     type: ''
+  });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    subTitle: ''
   });
 
   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
@@ -153,7 +159,14 @@ const Employees = () => {
                   </Controls.ActionButton>
                   <Controls.ActionButton
                     color="secondary"
-                    onClick={() => onDelete(item.id)}
+                    onClick={() => {
+                      setConfirmDialog({
+                        isOpen: true,
+                        title: 'Are you sure to delete this record?',
+                        subTitle: 'You can not undo this operation'
+                      });
+                      // onDelete(item.id)
+                    }}
                   >
                     <CloseIcon fontSize="small" />
                   </Controls.ActionButton>
@@ -172,6 +185,10 @@ const Employees = () => {
         <EmployeeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   );
 };
